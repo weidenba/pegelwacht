@@ -16,6 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 
+
 class MeasuringPoint:
 
     def __init__(self, name, coordinate_n, coordinate_e, import_plugin):
@@ -32,6 +33,6 @@ class MeasuringPoint:
 
     def __str__(self):
         return self.name
-    
+
     def __repr__(self):
         return 'MeasuringPoint(name="{}", coordinates="N:{} E:{}", import_plugin="{}"'.format(self.name, self.coordinate_n, self.coordinate_e, self.import_plugin)

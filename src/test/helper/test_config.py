@@ -23,4 +23,3 @@ def test_get_config():
     measuring_points = get_measuring_points(config)
     assert len(measuring_points) == 2
     assert str(measuring_points[0]) == 'test creek'
-    

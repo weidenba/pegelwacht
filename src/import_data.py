@@ -42,7 +42,7 @@ def _setup_argparser():
 if __name__ == '__main__':
     args = _setup_argparser()
     setup_logging(args)
-    
+
     config = get_config(args.config_file)
-    
+
     sys.exit(0)

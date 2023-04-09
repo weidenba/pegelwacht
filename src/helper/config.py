@@ -15,13 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-
 import logging
 
 from configparser import ConfigParser
 
 
 from objects.measuring_point import MeasuringPoint
+
 
 def get_measuring_points(config):
     measruing_points = list()
@@ -34,10 +34,9 @@ def get_measuring_points(config):
             config[point_index]['coordinate_e'],
             config[point_index]['import_module'])
         measruing_points.append(mp)
-        measuring_point_count +=1
+        measuring_point_count += 1
     return measruing_points
-        
-    
+
 
 def get_config(config_file):
     logging.debug('config used: {}'.format(config_file))
