@@ -18,47 +18,31 @@
 '''
 
 import argparse
-import logging
 import sys
 
-from helper.file_system import get_log_files, get_default_config_path
+from helper.config import get_config
+from helper.file_system import get_default_config_path
+from helper.logging import setup_logging
 
 
-PROGRAM_NAME = 'PegelWacht CSV Log Import'
+PROGRAM_NAME = 'PegelWacht Data Import'
 PROGRAM_VERSION = '0.1'
-PROGRAM_DESCRIPTION = 'import log files'
+PROGRAM_DESCRIPTION = 'import log data of measuring points'
 
 
 def _setup_argparser():
     parser = argparse.ArgumentParser(description='{} - {}'.format(PROGRAM_NAME, PROGRAM_DESCRIPTION))
     parser.add_argument('-V', '--version', action='version', version='{} {}'.format(PROGRAM_NAME, PROGRAM_VERSION))
     parser.add_argument('-d', '--debug', action='store_true', default=False, help='print debug messages')
-    parser.add_argument('-e', '--delete', action='store_true', default=False, help='delete processed log file')
-    parser.add_argument('-c', '--config', default=get_default_config_path(), help='config file path')
-    parser.add_argument('input_dir', help='input directory')
+    parser.add_argument('-e', '--delete', action='store_true', default=False, help='delete processed log files')
+    parser.add_argument('-c', '--config_file', default=get_default_config_path(), help='config file path')
     return parser.parse_args()
-
-
-def _setup_logging(args):
-    log_format = logging.Formatter(fmt='[%(asctime)s][%(module)s][%(levelname)s]: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-    logger = logging.getLogger('')
-    if args.debug:
-        logger.setLevel(logging.DEBUG)
-    else:
-        logger.setLevel(logging.INFO)
-    console_logger = logging.StreamHandler()
-    console_logger.setFormatter(log_format)
-    logger.addHandler(console_logger)
 
 
 if __name__ == '__main__':
     args = _setup_argparser()
-    _setup_logging(args)
+    setup_logging(args)
     
-    logging.debug('config used: {}'.format(args.config))
-    
-    log_files = get_log_files(args.input_dir)
-    
-    logging.info('{} log files found'.format(len(log_files)))
+    config = get_config(args.config_file)
     
     sys.exit(0)
