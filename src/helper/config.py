@@ -27,12 +27,13 @@ def get_measuring_points(config):
     measruing_points = list()
     measuring_point_count = 0
     while 'measuring_point_' + str(measuring_point_count) in config:
-        point_index = 'measuring_point_' + str(measuring_point_count)
+        config_section_name = 'measuring_point_' + str(measuring_point_count)
         mp = MeasuringPoint(
-            config[point_index]['name'],
-            config[point_index]['coordinate_n'],
-            config[point_index]['coordinate_e'],
-            config[point_index]['import_module'])
+            config_section_name,
+            config[config_section_name]['name'],
+            config[config_section_name]['coordinate_n'],
+            config[config_section_name]['coordinate_e'],
+            config[config_section_name]['import_module'])
         measruing_points.append(mp)
         measuring_point_count += 1
     return measruing_points
