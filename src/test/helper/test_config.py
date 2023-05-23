@@ -12,7 +12,7 @@ def test_get_measuring_points():
     result = get_measuring_points(test_config)
     assert len(result) == 2
     assert str(result[0]) == 'test_0'
-    assert result[1].__repr__() == 'MeasuringPoint(name="test_1", coordinates="N:50.510000 E:6.967777", import_plugin="web_crawler"'
+    assert result[1].__repr__() == 'MeasuringPoint(name="test_1", coordinates="N:50.510000 E:6.967777", import_plugin="web_crawler")'
 
 
 def test_get_config():

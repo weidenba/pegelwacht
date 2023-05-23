@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
+import logging
 from pathlib import Path
 
 
@@ -30,13 +31,25 @@ class CsvImportModule:
             config[measureing_point.config_section_name].getboolean('header_line'),
             int(config[measureing_point.config_section_name]['date_field']),
             int(config[measureing_point.config_section_name]['time_field']),
-            int(config[measureing_point.config_section_name]['level_field'])
+            int(config[measureing_point.config_section_name]['level_field']),
+            config[measureing_point.config_section_name]['separator']
         )
 
     def import_csv_log(self, log):
-        pass
+        with open(log) as log_file:
+            if self.measureing_point.header_line:
+                header = log_file.readline()
+                logging.debug('csv_header: {}'.format(header))
+            for line in log_file:
+                dataset = line.rstrip().split(self.measureing_point.separator)
+                print(dataset)
 
     def import_data(self):
         log_files = get_log_files(self.measureing_point.log_file_directory)
         for log in log_files:
             self.import_csv_log(log)
+
+    def __repr__(self):
+        return 'CSV_Import_Module(name="{}", log_file_dir="{}")'.format(
+            self.measureing_point,
+            self.measureing_point.log_file_directory)

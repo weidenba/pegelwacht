@@ -56,3 +56,6 @@ class DbConnection:
 
     def create_tables(self):
         self.base.metadata.create_all(self.engine)
+
+    def add_entry_mp1(self, timestamp, level):
+        pass

@@ -19,10 +19,12 @@
 
 import argparse
 import sys
+import logging
 
-from helper.config import get_config
+from helper.config import get_config, get_measuring_points
 from helper.file_system import get_default_config_path
 from helper.logging import setup_logging
+from data_import.csv import CsvImportModule
 
 
 PROGRAM_NAME = 'PegelWacht Data Import'
@@ -44,5 +46,13 @@ if __name__ == '__main__':
     setup_logging(args)
 
     config = get_config(args.config_file)
+
+    measuring_points = get_measuring_points(config)
+    for mp in measuring_points:
+        if mp.import_plugin == 'csv':
+            logging.debug(mp.__repr__())
+            import_module = CsvImportModule(mp, config)
+            logging.debug(import_module.__repr__())
+            import_module.import_data()
 
     sys.exit(0)
