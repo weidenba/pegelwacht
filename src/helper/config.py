@@ -21,9 +21,11 @@ from configparser import ConfigParser
 
 
 from objects.measuring_point import MeasuringPoint
+from helper.database import MeasuringPoint_1, MeasuringPoint_2, MeasuringPoint_3, MeasuringPoint_4
 
 
 def get_measuring_points(config):
+    MP_DATABASE_CLASSES = [MeasuringPoint_1, MeasuringPoint_2, MeasuringPoint_3, MeasuringPoint_4]
     measruing_points = list()
     measuring_point_count = 0
     while 'measuring_point_' + str(measuring_point_count) in config:
@@ -33,7 +35,8 @@ def get_measuring_points(config):
             config[config_section_name]['name'],
             config[config_section_name]['coordinate_n'],
             config[config_section_name]['coordinate_e'],
-            config[config_section_name]['import_module'])
+            config[config_section_name]['import_module'],
+            MP_DATABASE_CLASSES.pop(0))
         measruing_points.append(mp)
         measuring_point_count += 1
     return measruing_points

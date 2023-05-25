@@ -19,12 +19,13 @@
 
 class MeasuringPoint:
 
-    def __init__(self, config_section_name, name, coordinate_n, coordinate_e, import_plugin):
+    def __init__(self, config_section_name, name, coordinate_n, coordinate_e, import_plugin, database_class):
         self.config_section_name = config_section_name
         self.name = name
         self.coordinate_n = coordinate_n
         self.coordinate_e = coordinate_e
         self.import_plugin = import_plugin
+        self.database_class = database_class
 
     def set_csv_options(self, log_file_directory, header_line, date_field, time_field, level_field, separator):
         self.log_file_directory = log_file_directory

@@ -20,6 +20,7 @@ from pathlib import Path
 
 
 from helper.file_system import get_log_files
+from helper.time import get_unix_time_stamp
 
 
 class CsvImportModule:
@@ -42,7 +43,11 @@ class CsvImportModule:
                 logging.debug('csv_header: {}'.format(header))
             for line in log_file:
                 dataset = line.rstrip().split(self.measureing_point.separator)
-                print(dataset)
+                try:
+                    current_data_set = self.measureing_point.database_class(timestamp=get_unix_time_stamp(dataset[0], dataset[1]), level=dataset[2])
+                    logging.debug(current_data_set)
+                except IndexError:
+                    logging.debug('empty line in config file')
 
     def import_data(self):
         log_files = get_log_files(self.measureing_point.log_file_directory)

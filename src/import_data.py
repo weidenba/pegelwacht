@@ -26,7 +26,6 @@ from helper.file_system import get_default_config_path
 from helper.logging import setup_logging
 from data_import.csv import CsvImportModule
 
-
 PROGRAM_NAME = 'PegelWacht Data Import'
 PROGRAM_VERSION = '0.1'
 PROGRAM_DESCRIPTION = 'import log data of measuring points'

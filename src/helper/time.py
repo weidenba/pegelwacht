@@ -21,4 +21,4 @@ from time import strptime, mktime
 def get_unix_time_stamp(date, time):
     time_string = '{}-{}'.format(date, time)
     timestamp = strptime(time_string, '%d.%m.%Y-%H:%M')
-    return mktime(timestamp)
+    return int(mktime(timestamp))

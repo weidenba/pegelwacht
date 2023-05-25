@@ -24,20 +24,40 @@ class Base(orm.DeclarativeBase):
     pass
 
 
-class MeasuringDataSet(Base):
+class MeasuringPoint_1(Base):
+    __tablename__ = 'MeasuringPoint_1'
     timestamp = Column(Integer, primary_key=True)
     level = Column(Float)
 
     def __repr__(self) -> str:
-        return 'timestamp: {}; level: {}'.format(self.timestamp, self.level)
+        return '{} -> timestamp: {}; level: {}'.format(self.__tablename__, self.timestamp, self.level)
 
 
-class MeasuringPoint_1(MeasuringDataSet):
-    __table_name__ = 'MeasuringPoint_1'
+class MeasuringPoint_2():
+    __tablename__ = 'MeasuringPoint_2'
+    timestamp = Column(Integer, primary_key=True)
+    level = Column(Float)
+
+    def __repr__(self) -> str:
+        return '{} -> timestamp: {}; level: {}'.format(self.__tablename__, self.timestamp, self.level)
 
 
-class MeasuringPoint_2(MeasuringDataSet):
-    __talbe_name__ = 'MeasuringPoint_2'
+class MeasuringPoint_3():
+    __tablename__ = 'MeasuringPoint_3'
+    timestamp = Column(Integer, primary_key=True)
+    level = Column(Float)
+
+    def __repr__(self) -> str:
+        return '{} -> timestamp: {}; level: {}'.format(self.__tablename__, self.timestamp, self.level)
+
+
+class MeasuringPoint_4():
+    __tablename__ = 'MeasuringPoint_4'
+    timestamp = Column(Integer, primary_key=True)
+    level = Column(Float)
+
+    def __repr__(self) -> str:
+        return '{} -> timestamp: {}; level: {}'.format(self.__tablename__, self.timestamp, self.level)
 
 
 class DbConnection:
@@ -52,10 +72,10 @@ class DbConnection:
         else:
             sys.exit('databse provider not supported: {}'.format(provider))
 
-        self.session_maker = orm.sessionmaker(bind=self.engine)
+        self.session = orm.sessionmaker(bind=self.engine)
 
     def create_tables(self):
         self.base.metadata.create_all(self.engine)
 
-    def add_entry_mp1(self, timestamp, level):
-        pass
+    def add_entry(self, dataset):
+        self.session.add(dataset)
