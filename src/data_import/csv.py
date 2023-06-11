@@ -21,6 +21,7 @@ from pathlib import Path
 
 from helper.file_system import get_log_files
 from helper.time import get_unix_time_stamp
+from helper.data_conversion import string_to_float
 
 
 class CsvImportModule:
@@ -37,6 +38,7 @@ class CsvImportModule:
         )
 
     def import_csv_log(self, log):
+        imported_data = list()
         with open(log) as log_file:
             if self.measureing_point.header_line:
                 header = log_file.readline()
@@ -44,15 +46,19 @@ class CsvImportModule:
             for line in log_file:
                 dataset = line.rstrip().split(self.measureing_point.separator)
                 try:
-                    current_data_set = self.measureing_point.database_class(timestamp=get_unix_time_stamp(dataset[0], dataset[1]), level=dataset[2])
-                    logging.debug(current_data_set)
+                    current_data_set = self.measureing_point.database_class(timestamp=get_unix_time_stamp(dataset[0], dataset[1]), level=string_to_float(dataset[2]))
+                    imported_data.append(current_data_set)
                 except IndexError:
                     logging.debug('empty line in config file')
+        return imported_data
 
     def import_data(self):
         log_files = get_log_files(self.measureing_point.log_file_directory)
+        imported_data = list()
         for log in log_files:
-            self.import_csv_log(log)
+            logging.debug('processing file: {}'.format(log))
+            imported_data.extend(self.import_csv_log(log))
+        return imported_data
 
     def __repr__(self):
         return 'CSV_Import_Module(name="{}", log_file_dir="{}")'.format(

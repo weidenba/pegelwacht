@@ -25,6 +25,7 @@ from helper.config import get_config, get_measuring_points
 from helper.file_system import get_default_config_path
 from helper.logging import setup_logging
 from data_import.csv import CsvImportModule
+from helper.database import DbConnection
 
 PROGRAM_NAME = 'PegelWacht Data Import'
 PROGRAM_VERSION = '0.1'
@@ -47,11 +48,16 @@ if __name__ == '__main__':
     config = get_config(args.config_file)
 
     measuring_points = get_measuring_points(config)
+    database = DbConnection(config['database']['provider'], database=config['database']['database'])
+    database.create_tables()
+
     for mp in measuring_points:
         if mp.import_plugin == 'csv':
             logging.debug(mp.__repr__())
             import_module = CsvImportModule(mp, config)
             logging.debug(import_module.__repr__())
-            import_module.import_data()
+            imported_data = import_module.import_data()
+        logging.debug(imported_data)
+        database.add_entries(imported_data)
 
     sys.exit(0)

@@ -16,8 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
 import sys
+import logging
 
 from sqlalchemy import orm, engine, Column, Integer, Float
+from sqlalchemy.exc import IntegrityError
 
 
 class Base(orm.DeclarativeBase):
@@ -66,16 +68,26 @@ class DbConnection:
         self.base = Base
 
         if provider == 'sqlite':
-            self.engine = engine.create_engine('sqlite://{}'.format(database))
+            self.engine = engine.create_engine('sqlite:///{}'.format(database))
+            logging.debug('SqLite file: {}'.format(database))
         elif provider == 'mysql':
             self.engine = engine.create_engine('mysql://{}:{}@{}:{}/{}'.format(user, password, hostname, port, database))
         else:
             sys.exit('databse provider not supported: {}'.format(provider))
 
-        self.session = orm.sessionmaker(bind=self.engine)
+        self.Session = orm.sessionmaker(bind=self.engine)
 
     def create_tables(self):
         self.base.metadata.create_all(self.engine)
 
     def add_entry(self, dataset):
-        self.session.add(dataset)
+        session = self.Session()
+        session.add(dataset)
+        try:
+            session.commit()
+        except IntegrityError:
+            logging.debug('{} already present'.format(dataset))
+
+    def add_entries(self, datasets):
+        for dataset in datasets:
+            self.add_entry(dataset)
