@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content%}
+<h1>{{title}}</h1>
+{%for mp in measuring_points %}
+<h2>{{ mp.name }}</h2>
+{% endfor %}
+{% endblock %}
