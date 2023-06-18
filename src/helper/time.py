@@ -15,10 +15,16 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-from time import strptime, mktime
+from time import strptime, mktime, time
 
 
 def get_unix_time_stamp(date, time):
     time_string = '{}-{}'.format(date, time)
     timestamp = strptime(time_string, '%d.%m.%Y-%H:%M')
     return int(mktime(timestamp))
+
+
+def get_time_period(days):
+    end_of_period = int(time())
+    begin_of_period = end_of_period - (60 * 60 * 24 * days)
+    return begin_of_period, end_of_period

@@ -6,5 +6,7 @@
 <h1>{{title}}</h1>
 {%for mp in measuring_points %}
 <h2>{{ mp.name }}</h2>
+Letzte Messung: {{ mp.level_data[-1][0] | unix_to_hr_time }}<br />
+Aktueller Pegel: {{ mp.level_data[-1][1] }}
 {% endfor %}
 {% endblock %}

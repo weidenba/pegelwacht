@@ -48,7 +48,7 @@ if __name__ == '__main__':
     config = get_config(args.config_file)
 
     measuring_points = get_measuring_points(config)
-    database = DbConnection(config['database']['provider'], database=config['database']['database'])
+    database = DbConnection(config)
     database.create_tables()
 
     for mp in measuring_points:

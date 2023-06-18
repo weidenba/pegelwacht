@@ -15,11 +15,26 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
-import sys
 import logging
 
 from sqlalchemy import orm, engine, Column, Integer, Float
 from sqlalchemy.exc import IntegrityError
+
+
+def get_database_uri(config):
+    if config['database']['provider'] == 'sqlite':
+        uri = 'sqlite:///{}'.format(config['database']['database'])
+    elif config['database']['provider'] == 'mysql':
+        uri = 'mysql://{}:{}@{}:{}/{}'.format(
+            config['database']['user'],
+            config['database']['password'],
+            config['database']['host'],
+            config['database']['port'],
+            config['database']['database'])
+    else:
+        raise Exception('database provider not supported')
+
+    return uri
 
 
 class Base(orm.DeclarativeBase):
@@ -64,17 +79,9 @@ class MeasuringPoint_4():
 
 class DbConnection:
 
-    def __init__(self, provider, user=None, password=None, database=None, hostname=None, port=None):
+    def __init__(self, config):
         self.base = Base
-
-        if provider == 'sqlite':
-            self.engine = engine.create_engine('sqlite:///{}'.format(database))
-            logging.debug('SqLite file: {}'.format(database))
-        elif provider == 'mysql':
-            self.engine = engine.create_engine('mysql://{}:{}@{}:{}/{}'.format(user, password, hostname, port, database))
-        else:
-            sys.exit('databse provider not supported: {}'.format(provider))
-
+        self.engine = engine.create_engine(get_database_uri(config))
         self.Session = orm.sessionmaker(bind=self.engine)
 
     def create_tables(self):
@@ -86,6 +93,7 @@ class DbConnection:
         try:
             session.commit()
         except IntegrityError:
+            session.rollback()
             logging.debug('{} already present'.format(dataset))
 
     def add_entries(self, datasets):

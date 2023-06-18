@@ -6,3 +6,4 @@ pytest-cov
 uwsgi
 flask
 sqlalchemy
+Flask-SQLAlchemy

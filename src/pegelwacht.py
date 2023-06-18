@@ -17,16 +17,33 @@
 '''
 from CONFIG import CONFIG_FILE_PATH
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
 from helper.config import get_config, get_measuring_points
+from helper.database import get_database_uri
+from filters.convert import unix_to_hr_time
 
 
+config = get_config(CONFIG_FILE_PATH)
+database = SQLAlchemy()
 app = Flask(__name__)
+app.jinja_env.filters['unix_to_hr_time'] = unix_to_hr_time
+app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri(config)
+database.init_app(app)
+
+
+def get_level_data(mp):
+    data_set = list()
+    result = database.session.execute(database.select(mp.database_class).order_by(mp.database_class.timestamp))
+    for data_point in result:
+        data_set.append([data_point[0].timestamp, data_point[0].level])
+    return data_set
 
 
 @app.route('/')
 def home():
-    config = get_config(CONFIG_FILE_PATH)
     measuring_points = get_measuring_points(config)
+    for mp in measuring_points:
+        mp.set_level_data(get_level_data(mp))
     return render_template('home.html', title=config['ui_settings']['title'], measuring_points=measuring_points)
 
 
