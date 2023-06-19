@@ -35,8 +35,9 @@ class MeasuringPoint:
         self.level_field = level_field
         self.separator = separator
 
-    def set_level_data(self, level_data):
-        self.level_data = level_data
+    def set_level_data(self, timestamps, levels):
+        self.timestamps = timestamps
+        self.levels = levels
 
     def __str__(self):
         return self.name

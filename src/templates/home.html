@@ -2,11 +2,44 @@
 
 {% block title %} Home {% endblock %}
 
+{% block head %}
+
+<script src="{{ url_for('static', filename='node_modules/chart.js/dist/chart.umd.js') }}"></script>
+
+{% endblock %}
+
 {% block content%}
 <h1>{{title}}</h1>
 {%for mp in measuring_points %}
 <h2>{{ mp.name }}</h2>
-Letzte Messung: {{ mp.level_data[-1][0] | unix_to_hr_time }}<br />
-Aktueller Pegel: {{ mp.level_data[-1][1] }}
+Letzte Messung: {{ mp.timestamps[-1] | unix_to_hr_time }}<br />
+Aktueller Pegel: {{ mp.levels[-1] }} m
+
+<div style="width: 800px">
+	<canvas id="level_history"></canvas>
+</div>
+
+
+<script>
+const ctx = document.getElementById('level_history');
+
+const labels = {{mp.timestamps}};
+const data = {
+  labels: labels,
+  datasets: [{
+    label: '{{mp.name}}',
+    data: {{mp.levels}},
+    fill: false,
+    borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1
+  }]
+};
+
+const chart = new Chart(ctx, {
+	  type: 'line',
+	  data: data,
+	});
+</script>
+
 {% endfor %}
 {% endblock %}

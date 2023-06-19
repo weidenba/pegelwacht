@@ -32,18 +32,21 @@ database.init_app(app)
 
 
 def get_level_data(mp):
-    data_set = list()
+    timestamps = list()
+    levels = list()
     result = database.session.execute(database.select(mp.database_class).order_by(mp.database_class.timestamp))
     for data_point in result:
-        data_set.append([data_point[0].timestamp, data_point[0].level])
-    return data_set
+        timestamps.append(data_point[0].timestamp)
+        levels.append(data_point[0].level)
+    return timestamps, levels
 
 
 @app.route('/')
 def home():
     measuring_points = get_measuring_points(config)
     for mp in measuring_points:
-        mp.set_level_data(get_level_data(mp))
+        timestamps, levels = get_level_data(mp)
+        mp.set_level_data(timestamps, levels)
     return render_template('home.html', title=config['ui_settings']['title'], measuring_points=measuring_points)
 
 
