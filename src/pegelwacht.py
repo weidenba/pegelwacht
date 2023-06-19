@@ -18,9 +18,11 @@
 from CONFIG import CONFIG_FILE_PATH
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import and_
 from helper.config import get_config, get_measuring_points
 from helper.database import get_database_uri
 from filters.convert import unix_to_hr_time
+from helper.time import get_time_period
 
 
 config = get_config(CONFIG_FILE_PATH)
@@ -34,9 +36,10 @@ database.init_app(app)
 def get_level_data(mp):
     timestamps = list()
     levels = list()
-    result = database.session.execute(database.select(mp.database_class).order_by(mp.database_class.timestamp))
+    begin, end = get_time_period(7)
+    result = database.session.execute(database.select(mp.database_class).order_by(mp.database_class.timestamp).where(and_(mp.database_class.timestamp > begin, mp.database_class.timestamp < end )))
     for data_point in result:
-        timestamps.append(data_point[0].timestamp)
+        timestamps.append(unix_to_hr_time(data_point[0].timestamp))
         levels.append(data_point[0].level)
     return timestamps, levels
 
