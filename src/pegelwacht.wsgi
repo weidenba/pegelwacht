@@ -15,6 +15,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 '''
+activate_this = '/home/peter/git/pegelwacht/src/venv/bin/activate'
+with open(activate_this) as file_:
+    exec(file_.read(), dict(__file__=activate_this))
+
 from pegelwacht import app
 
 if __name__ == '__main__':
