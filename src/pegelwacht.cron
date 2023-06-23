@@ -1,1 +1,1 @@
-*/16 * * * * /home/pegelwacht/git/pegelwacht/cronjob_scripts/import.sh
+1,16,31,46 * * * * /home/pegelwacht/src/venv/bin/python3 /home/pegelwacht/src/import_data.py

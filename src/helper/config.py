@@ -35,6 +35,7 @@ def get_measuring_points(config):
             config[config_section_name]['name'],
             config[config_section_name]['coordinate_n'],
             config[config_section_name]['coordinate_e'],
+            config[config_section_name]['critical_level'],
             config[config_section_name]['import_module'],
             MP_DATABASE_CLASSES.pop(0))
         measruing_points.append(mp)

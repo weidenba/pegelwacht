@@ -19,11 +19,12 @@
 
 class MeasuringPoint:
 
-    def __init__(self, config_section_name, name, coordinate_n, coordinate_e, import_plugin, database_class):
+    def __init__(self, config_section_name, name, coordinate_n, coordinate_e, critical_level, import_plugin, database_class):
         self.config_section_name = config_section_name
         self.name = name
         self.coordinate_n = coordinate_n
         self.coordinate_e = coordinate_e
+        self.critical_level = critical_level
         self.import_plugin = import_plugin
         self.database_class = database_class
 

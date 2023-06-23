@@ -6,8 +6,8 @@ from helper.config import get_measuring_points, get_config
 
 def test_get_measuring_points():
     test_config = ConfigParser()
-    test_config['measuring_point_0'] = {'name': 'test_0', 'coordinate_n': '50.510229', 'coordinate_e': '6.967724', 'import_module': 'csv'}
-    test_config['measuring_point_1'] = {'name': 'test_1', 'coordinate_n': '50.510000', 'coordinate_e': '6.967777', 'import_module': 'web_crawler'}
+    test_config['measuring_point_0'] = {'name': 'test_0', 'critical_level': '1,0', 'coordinate_n': '50.510229', 'coordinate_e': '6.967724', 'import_module': 'csv'}
+    test_config['measuring_point_1'] = {'name': 'test_1', 'critical_level': '2,0', 'coordinate_n': '50.510000', 'coordinate_e': '6.967777', 'import_module': 'web_crawler'}
 
     result = get_measuring_points(test_config)
     assert len(result) == 2

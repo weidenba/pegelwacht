@@ -21,3 +21,7 @@ from datetime import datetime
 def unix_to_hr_time(timestamp: int) -> str:
     dt = datetime.fromtimestamp(timestamp)
     return dt.strftime('%d.%m.%Y - %H:%M:%S')
+
+
+def separator_conversion(input_string, original='.', replacement=','):
+    return str(input_string).replace(original, replacement)

@@ -9,16 +9,24 @@
 {% endblock %}
 
 {% block content%}
-<h1>{{title}}</h1>
+
 {%for mp in measuring_points %}
-<h2>{{ mp.name }}</h2>
-Letzte Messung: {{ mp.timestamps[-1] }}<br />
-Aktueller Pegel: {{ mp.levels[-1] }} m
 
-<div style="width: 800px">
-	<canvas id="{{ mp.name }}_history"></canvas>
+
+
+
+<div class=container-fluid>
+	<div class="row">
+		<div class="col">
+			<b>{{ mp.name }}</b> <br />
+			<h2>Aktueller Pegel: {{ mp.levels[-1] | separator_conversion }} m </h2>
+			Letzte Messung: {{ mp.timestamps[-1] }}
+		</div>
+		<div class="col">
+			<canvas id="{{ mp.name }}_history"></canvas>
+		</div>
+	</div>
 </div>
-
 
 <script>
 const ctx = document.getElementById('{{ mp.name }}_history');
@@ -26,13 +34,24 @@ const ctx = document.getElementById('{{ mp.name }}_history');
 const labels = {{ mp.timestamps | safe }};
 const data = {
   labels: labels,
-  datasets: [{
-    label: 'Pegel {{mp.name}} {{mp.timestamps[0]}} bis {{mp.timestamps[-1]}}',
-    data: {{mp.levels}},
-    fill: false,
-    borderColor: 'rgb(75, 192, 192)',
-    tension: 0.1
-  }]
+  datasets: [
+	  {
+		label: 'Pegel {{mp.name}} {{mp.timestamps[0]}} bis {{mp.timestamps[-1]}}',
+    	data: {{mp.levels}},
+    	fill: true,
+    	borderColor: 'rgb(75, 192, 192)',
+    	tension: 0.1,
+    	pointRadius: 0,
+  },
+  {
+	  label: 'Überschwemmungshöhe',
+	  data: [{%for i in mp.levels %}{{mp.critical_level}}, {% endfor %}],
+	  fill: false,
+	  borderColor: 'rgb(255, 0, 0)',
+	  tension: 0.1,
+	  pointRadius: 0,
+  }
+  ]
 };
 
 const chart = new Chart(ctx, {

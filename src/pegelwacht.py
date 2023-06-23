@@ -21,7 +21,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 from helper.config import get_config, get_measuring_points
 from helper.database import get_database_uri
-from filters.convert import unix_to_hr_time
+from filters.convert import unix_to_hr_time, separator_conversion
 from helper.time import get_time_period
 
 
@@ -29,6 +29,7 @@ config = get_config(CONFIG_FILE_PATH)
 database = SQLAlchemy()
 app = Flask(__name__)
 app.jinja_env.filters['unix_to_hr_time'] = unix_to_hr_time
+app.jinja_env.filters['separator_conversion'] = separator_conversion
 app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri(config)
 database.init_app(app)
 
@@ -51,6 +52,12 @@ def home():
         timestamps, levels = get_level_data(mp)
         mp.set_level_data(timestamps, levels)
     return render_template('home.html', title=config['ui_settings']['title'], measuring_points=measuring_points)
+
+
+@app.route('/imprint')
+def imprint():
+    imprint_data = config['imprint']
+    return render_template('imprint.html', title=config['ui_settings']['title'], imprint_data=imprint_data)
 
 
 if __name__ == "__main__":
