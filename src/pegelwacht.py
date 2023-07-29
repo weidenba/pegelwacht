@@ -37,7 +37,7 @@ database.init_app(app)
 def get_level_data(mp):
     timestamps = list()
     levels = list()
-    begin, end = get_time_period(7)
+    begin, end = get_time_period(float(config['ui_settings']['default_time_period']))
     result = database.session.execute(database.select(mp.database_class).order_by(mp.database_class.timestamp).where(and_(mp.database_class.timestamp > begin, mp.database_class.timestamp < end)))
     for data_point in result:
         timestamps.append(unix_to_hr_time(data_point[0].timestamp))
