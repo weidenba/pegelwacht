@@ -23,6 +23,7 @@ from helper.config import get_config, get_measuring_points
 from helper.database import get_database_uri
 from filters.convert import unix_to_hr_time, separator_conversion
 from helper.time import get_time_period
+from filters.tendency import get_tendency
 
 
 config = get_config(CONFIG_FILE_PATH)
@@ -30,6 +31,7 @@ database = SQLAlchemy()
 app = Flask(__name__)
 app.jinja_env.filters['unix_to_hr_time'] = unix_to_hr_time
 app.jinja_env.filters['separator_conversion'] = separator_conversion
+app.jinja_env.filters['tendency'] = get_tendency
 app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri(config)
 database.init_app(app)
 
